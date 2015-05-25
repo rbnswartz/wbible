@@ -5,6 +5,7 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
         $scope.index=data;
     });
     $scope.getBook=function(book){
+        $scope.bookData = "Loading...";
         $http.get(book.src).success(function(data){
             $scope.bookData = data;
         });
