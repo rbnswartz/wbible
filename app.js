@@ -10,7 +10,7 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
             $scope.bookData = data;
             $scope.lines = $scope.bookData.split("\n");
             $scope.lines.map(function(data){
-                console.log(parseUSFM(data));
+                console.log($scope.parseUSFM(data));
             });
         });
     };
