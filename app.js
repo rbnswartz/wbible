@@ -8,13 +8,22 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
         $scope.bookData = "Loading...";
         $http.get(book.src).success(function(data){
             $scope.bookData = data;
+            $scope.render = "";
+            $scope.renderFinal = $sce.trustAsHtml($scope.render);
             $scope.lines = $scope.bookData.split("\\");
             $scope.parsedLines=[];
             $scope.lines.map(function(data){
                 var tmp = $scope.parseUSFM(data.trim());
                 console.log(tmp);
                 $scope.parsedLines.push(tmp);
+                if(tmp.tag == "c"){
+                    $scope.render += "<h3>" + tmp.number + "</h3>";
+                }else if (tmp.tag == "v"){
+                    $scope.render += "<span class = \"verse\">" + tmp.number + "</span>" + tmp.text + " ";
+                }
+                $scope.renderFinal = $sce.trustAsHtml($scope.render);
             });
+
         });
     };
     $scope.parseUSFM = function(input){
