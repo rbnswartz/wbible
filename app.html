@@ -25,14 +25,6 @@
 <div>Checking level: {{version.status.checking_level}}</div>
 <div>Book: {{book.title}}</div>
 
-<div class="scripture">{{bookData}}</div>
-<table class="table table-bordered">
-    <tr ng-repeat="c in parsedLines">
-        <td>{{c.tag}}</td>
-        <td>{{c.number}}</td>
-        <td>{{c.text}}</td>
-    </tr>
-</table>
 <div ng-bind-html="renderFinal"></div>
 </body>
 </html>
