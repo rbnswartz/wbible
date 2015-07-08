@@ -8,14 +8,17 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
         $scope.bookData = "Loading...";
         $http.get(book.src).success(function(data){
             $scope.bookData = data;
-            $scope.lines = $scope.bookData.split("\n");
+            $scope.lines = $scope.bookData.split("\\");
+            $scope.parsedLines=[];
             $scope.lines.map(function(data){
-                console.log($scope.parseUSFM(data));
+                var tmp = $scope.parseUSFM(data.trim());
+                console.log(tmp);
+                $scope.parsedLines.push(tmp);
             });
         });
     };
     $scope.parseUSFM = function(input){
-        var pattern = /^\\(\S+) *(\d*) *(.*)$/;
+        var pattern = /^(\S+) *(\d*) *([\s\S]*)$/;
         var result = pattern.exec(input);
         if (result === null){
             return {
