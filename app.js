@@ -14,20 +14,21 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
             $scope.parsedLines=[];
             $scope.lines.map(function(data){
                 var currentTag = $scope.parseUSFM(data.trim());
-                console.log(currentTag);
-                if ($scope.renderers[currentTag.tag] === undefined){
-                    $scope.render=$scope.default(currentTag);
-                    $scope.renderFinal=$sce.trustAsHtml($scope.render);
-                }else{
-                    $scope.render=$scope.renderers[currentTag.tag](currentTag);
-                    $scope.renderFinal=$sce.trustAsHtml($scope.render);
+                if (currentTag.tag !== "" && currentTag.tag !== null){
+                    if ($scope.renderLibrary[currentTag.tag] === undefined){
+                        $scope.render+=$scope.renderLibrary["default"].render(currentTag);
+                        $scope.renderFinal=$sce.trustAsHtml($scope.render);
+                    }else{
+                        $scope.render+=$scope.renderLibrary[currentTag.tag].render(currentTag);
+                        $scope.renderFinal=$sce.trustAsHtml($scope.render);
+                    }
                 }
             });
 
         });
     };
     $scope.parseUSFM = function(input){
-        var pattern = /^(\S+) *(\d*) *([\s\S]*)$/;
+        var pattern = /^(\S+) *([\d|-]*) *([\s\S]*)$/;
         var result = pattern.exec(input);
         if (result === null){
             return {
@@ -44,15 +45,16 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
             text: result[3]
         };
     };
-    $scope.renderers = {
+    $scope.renderLibrary = {
         default: {
             render:function(input){
+                console.log(input);
                 return input.text;
             }
         },
         c:{
             render:function(input){
-                return "<span class=\"chapter\">" + input.number + "</span>";
+                return "<br/><span class=\"chapter\">" + input.number + "</span> ";
             }
         },
         v:{
@@ -88,6 +90,11 @@ angular.module("app").controller("controller",function($scope,$http,$sce){
         mt1:{
             render:function(input){
                 return "";
+            }
+        },
+        h:{
+            render:function(input){
+                return "<h3>" + input.text + "</h3>";
             }
         },
 
